@@ -8,12 +8,12 @@ app.use(bodyParser.json());
 const estadisticas = {};
 
 // Endpoint para registrar un duelo
-app.post('/duelo', (req, res) => {
-    const { usuario1, usuario2, resultado } = req.body;
+app.get('/duelo', (req, res) => {
+    const { usuario1, usuario2, resultado } = req.query;
 
-    // Validar los datos recibidos
+    // Validar datos
     if (!usuario1 || !usuario2 || !resultado) {
-        return res.status(400).json({ error: 'Faltan datos: usuario1, usuario2 o resultado' });
+        return res.status(400).send('Faltan parámetros: usuario1, usuario2 o resultado.');
     }
 
     // Inicializar estadísticas si no existen
@@ -33,7 +33,7 @@ app.post('/duelo', (req, res) => {
     estadisticas[usuario1].duelos[usuario2] = (estadisticas[usuario1].duelos[usuario2] || 0) + 1;
     estadisticas[usuario2].duelos[usuario1] = (estadisticas[usuario2].duelos[usuario1] || 0) + 1;
 
-    res.json({ exito: true, mensaje: 'Estadísticas actualizadas', estadisticas });
+    res.send('Estadísticas actualizadas');
 });
 
 // Endpoint para consultar estadísticas de un usuario
